@@ -5,5 +5,3 @@ __pycache__/
 *.py[cod]
 *.log
 *.sqlite3
-*.db
-instance/
