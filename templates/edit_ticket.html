@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="top-bar">
+    <div class="top-bar-left-aligner">
+        <a href="{{ url_for('main_blueprint.dashboard') }}" class="home-icon">
+            &#x2302;
+        </a>
+    </div>
+    <div class="top-bar-text">Edit Ticket</div> {# Changed text for this page #}
+</div>
+
+<div class="dashboard-layout">
+    <div class="sidebar">
+        <a href="{{ url_for('main_blueprint.create_ticket') }}">Create Ticket</a>
+        <a href="{{ url_for('main_blueprint.view_tickets') }}">View Your Tickets</a>
+        {% if current_user.role == 'Admin' %}
+        <a href="{{ url_for('main_blueprint.manage_tickets') }}">Manage Tickets</a> 
+        <a href="{{ url_for('main_blueprint.manage_users') }}">Manage Users</a>
+        {% endif %}
+        <a href="{{ url_for('main_blueprint.logout') }}">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <div class="create-ticket-form-container"> {# Reusing the container style from create_ticket #}
+            <h2>Edit Ticket #{{ ticket.id }}</h2> {# Displaying ticket ID #}
+            <br></br>
+            <form method="POST" style="width: 100%;">
+                {{ form.hidden_tag() }}
+                <div class="input-field">
+                    {{ form.department.label }}<br>
+                    {{ form.department() }}
+                </div>
+                <div class="input-field">
+                    {{ form.subject.label }}<br>
+                    {{ form.subject(placeholder="Enter subject...") }}
+                </div>
+                <div class="input-field">
+                    {{ form.priority.label }}<br>
+                    {{ form.priority() }}
+                </div>
+                <div class="input-field">
+                    {{ form.request_type.label }}<br>
+                    {{ form.request_type(id="request_type_select") }}
+                </div>
+                <div class="input-field" id="other_request_type_field" style="display: none;">
+                    {{ form.other_request_type.label }}<br>
+                    {{ form.other_request_type(placeholder="Please specify...") }}
+                </div>
+                <div class="input-field">
+                    {{ form.description.label }}<br>
+                    {{ form.description(placeholder="Describe your issue...", rows=8) }}
+                </div>
+                <div class="input-field">
+                    {{ form.submit(class="btn") }}
+                </div>
+            </form>
+            <p style="text-align: center; margin-top: 20px;"><a href="{{ url_for('main_blueprint.dashboard') }}" style="color: white; text-decoration: none;">Back to Dashboard</a></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const requestTypeSelect = document.getElementById('request_type_select');
+        const otherRequestTypeField = document.getElementById('other_request_type_field');
+
+        function toggleOtherRequestTypeField() {
+            if (requestTypeSelect.value === 'Other') {
+                otherRequestTypeField.style.display = 'block';
+            } else {
+                otherRequestTypeField.style.display = 'none';
+            }
+        }
+
+        // Initial check on page load to set visibility based on pre-populated value
+        toggleOtherRequestTypeField();
+
+        // Listen for changes on the select field
+        requestTypeSelect.addEventListener('change', toggleOtherRequestTypeField);
+    });
+</script>
+{% endblock %}

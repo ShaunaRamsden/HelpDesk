@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="top-bar">
+    <div class="top-bar-left-aligner">
+        <a href="{{ url_for('main_blueprint.dashboard') }}" class="home-icon">
+            &#x2302;
+        </a>
+    </div>
+    <div class="top-bar-text">Help Desk</div>
+</div>
+
+<div class="dashboard-layout">
+    <div class="sidebar">
+        <a href="{{ url_for('main_blueprint.create_ticket') }}">Create Ticket</a>
+        <a href="{{ url_for('main_blueprint.view_tickets') }}">View Your Tickets</a>
+        {% if current_user.role == 'Admin' %}
+        <a href="{{ url_for('main_blueprint.manage_tickets') }}">Manage Tickets</a> 
+        <a href="{{ url_for('main_blueprint.manage_users') }}">Manage Users</a>
+        {% endif %}
+        <a href="{{ url_for('main_blueprint.logout') }}">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <div class="dashboard-card welcome-card">
+            <h3>Welcome, {{ current_user.name }}!</h3>
+        </div>
+
+        <div class="dashboard-info-wrapper">
+            <h2>Dashboard</h2>
+            <br></br>
+            <div class="dashboard-card-container">
+                <div class="dashboard-card">
+                    <h3>Total Tickets</h3>
+                    <p>{{ total_tickets or 0 }}</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Your Info</h3>
+                    <p class="username-info">Username: {{ current_user.username }}</p>
+                    <p class="role-info">Role: {{ current_user.role }}</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Recent Ticket</h3>
+                    {% if recent_ticket %}
+                        <p>{{ recent_ticket.subject}}</p>
+                    {% else %}
+                        <p>No tickets yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

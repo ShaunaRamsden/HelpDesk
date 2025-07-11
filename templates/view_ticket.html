@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="top-bar">
+    <div class="top-bar-left-aligner">
+        <a href="{{ url_for('main_blueprint.view_tickets') }}" class="back-icon" style="font-size: 24px; text-decoration:none; color: white;">
+            &#8592; Back
+        </a>
+    </div>
+    <div class="top-bar-text">Ticket Details</div>
+</div>
+
+<div class="dashboard-layout">
+    <div class="sidebar">
+        <a href="{{ url_for('main_blueprint.create_ticket') }}">Create Ticket</a>
+        <a href="{{ url_for('main_blueprint.view_tickets') }}">View Your Tickets</a>
+        {% if current_user.role == 'Admin' %}
+        <a href="{{ url_for('main_blueprint.manage_tickets') }}">Manage Tickets</a> 
+        <a href="{{ url_for('main_blueprint.manage_users') }}">Manage Users</a>
+        {% endif %}
+        <a href="{{ url_for('main_blueprint.logout') }}">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <div class="dashboard-card" style="background: rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 30px; color: white; max-width: 700px; margin: 40px auto;">
+            <h2 style="margin-bottom: 20px;">Ticket #{{ ticket.id }} - {{ ticket.subject }}</h2>
+
+            <p><strong>Department:</strong> {{ ticket.department }}</p>
+            <p><strong>Priority:</strong> {{ ticket.priority }}</p>
+            <p><strong>Status:</strong> {{ ticket.status }}</p>
+            <p><strong>Request Type:</strong> 
+                {% if ticket.request_type == 'Other' %}
+                    {{ ticket.other_request_type }}
+                {% else %}
+                    {{ ticket.request_type }}
+                {% endif %}
+            </p>
+
+            <p><strong>Description:</strong></p>
+            <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; white-space: pre-wrap; margin-bottom: 20px;">
+                {{ ticket.description }}
+            </div>
+
+            <p><strong>Created At:</strong> {{ ticket.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+
+            <div style="margin-top: 25px;">
+                <a href="{{ url_for('main_blueprint.edit_ticket', ticket_id=ticket.id) }}" 
+                   style="color: #ADD8E6; text-decoration: none; font-weight: bold; margin-right: 20px;">
+                   Edit Ticket
+                </a>
+                <a href="{{ url_for('main_blueprint.view_tickets') }}" 
+                   style="color: #90ee90; text-decoration: none; font-weight: bold;">
+                   Back to Tickets
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

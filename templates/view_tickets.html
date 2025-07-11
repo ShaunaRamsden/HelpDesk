@@ -1,0 +1,64 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="top-bar">
+    <div class="top-bar-left-aligner">
+        <a href="{{ url_for('main_blueprint.dashboard') }}" class="home-icon">
+            &#x2302;
+        </a>
+    </div>
+    <div class="top-bar-text">View Your Tickets</div>
+</div>
+
+<div class="dashboard-layout">
+    <div class="sidebar">
+        <a href="{{ url_for('main_blueprint.create_ticket') }}">Create Ticket</a>
+        <a href="{{ url_for('main_blueprint.view_tickets') }}">View Your Tickets</a>
+        {% if current_user.role == 'Admin' %}
+        <a href="{{ url_for('main_blueprint.manage_tickets') }}">Manage Tickets</a> 
+        <a href="{{ url_for('main_blueprint.manage_users') }}">Manage Users</a>
+        {% endif %}
+        <a href="{{ url_for('main_blueprint.logout') }}">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <div class="dashboard-info-wrapper" style="margin-top: 0;">
+            <table style="width: 100%; margin: 0 auto; border-collapse: collapse; color: white; background: rgba(255, 255, 255, 0.1); border-radius: 15px; overflow: hidden;">
+                <thead>
+                    <tr style="background-color: rgba(255,255,255,0.2);">
+                        <h2>All Your Tickets</h2>
+                        <br></br>
+                        <th style="padding: 15px; text-align: left;">Ticket ID</th>
+                        <th style="padding: 15px; text-align: left;">Subject</th>
+                        <th style="padding: 15px; text-align: left;">Department</th>
+                        <th style="padding: 15px; text-align: left;">Priority</th>
+                        <th style="padding: 15px; text-align: left;">Status</th>
+                        <th style="padding: 15px; text-align: left;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in tickets %}
+                    <tr style="background-color: rgba(255,255,255,0.05); border-top: 1px solid rgba(255, 255, 255, 0.2);">
+                        <td style="padding: 15px;">{{ ticket.id }}</td>
+                        <td style="padding: 15px;">{{ ticket.subject }}</td>
+                        <td style="padding: 15px;">{{ ticket.department }}</td>
+                        <td style="padding: 15px;">{{ ticket.priority }}</td>
+                        <td style="padding: 15px;">{{ ticket.status }}</td>
+                        <td style="padding: 15px;">
+                            <a href="{{ url_for('main_blueprint.view_ticket', ticket_id=ticket.id) }}" style="color: #90ee90; text-decoration: none; margin-right: 10px;">View</a>
+                            <a href="{{ url_for('main_blueprint.edit_ticket', ticket_id=ticket.id) }}" style="color: #ADD8E6; text-decoration: none; margin-right: 10px;">Edit</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% if not tickets %}
+                    <tr style="background-color: rgba(255,255,255,0.05); border-top: 1px solid rgba(255, 255, 255, 0.2);">
+                        <td colspan="6" style="padding: 15px; text-align: center;">No tickets found.</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

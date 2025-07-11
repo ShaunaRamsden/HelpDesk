@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* Inline styling just for the name fields row */
+        .name-row {
+            display: flex;
+            gap: 20px;
+        }
+        .name-row .input-field {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- FLASH MESSAGES -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flashes">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <h2>Register</h2>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <!-- Name & Surname in a Row -->
+            <div class="name-row">
+                <div class="input-field">
+                    {{ form.name.label }}
+                    {{ form.name(placeholder="First Name") }}
+                </div>
+                <div class="input-field">
+                    {{ form.surname.label }}
+                    {{ form.surname(placeholder="Last Name") }}
+                </div>
+            </div>
+
+            <div class="input-field">
+                {{ form.username.label }}
+                {{ form.username(placeholder="Username") }}
+            </div>
+
+            <div class="input-field">
+                {{ form.password.label }}
+                {{ form.password(placeholder="Password") }}
+            </div>
+
+            <div class="input-field">
+                {{ form.confirm_password.label }}
+                {{ form.confirm_password(placeholder="Confirm Password") }}
+            </div>
+
+            {{ form.submit(class="btn") }}
+
+            <p class="register-link">Already have an account?
+                <a href="{{ url_for('main_blueprint.login') }}">Login</a>
+            </p>
+        </form>
+    </div>
+</body>
+</html>

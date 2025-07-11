@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="top-bar">
+    <div class="top-bar-left-aligner">
+        <a href="{{ url_for('main_blueprint.dashboard') }}" class="home-icon">
+            &#x2302;
+        </a>
+    </div>
+    <div class="top-bar-text">Edit User Role</div>
+</div>
+
+<div class="dashboard-layout">
+    <div class="sidebar">
+        <a href="{{ url_for('main_blueprint.create_ticket') }}">Create Ticket</a>
+        <a href="{{ url_for('main_blueprint.view_tickets') }}">View Your Tickets</a>
+        {% if current_user.role == 'Admin' %}
+        <a href="{{ url_for('main_blueprint.manage_tickets') }}">Manage Tickets</a> 
+        <a href="{{ url_for('main_blueprint.manage_users') }}">Manage Users</a>
+        {% endif %}
+        <a href="{{ url_for('main_blueprint.logout') }}">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <div class="create-ticket-form-container"> {# Reusing the styling container #}
+            <h2>Edit Role for {{ user.username }} (ID: {{ user.id }})</h2>
+            <br>
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                <div class="input-field">
+                    {{ form.role.label }}<br>
+                    {{ form.role() }}
+                </div>
+                <div class="input-field">
+                    {{ form.submit(class="btn") }}
+                </div>
+            </form>
+            <p style="text-align: center; margin-top: 20px;">
+                <a href="{{ url_for('main_blueprint.manage_users') }}" style="color: white; text-decoration: none;">Back to Manage Users</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
